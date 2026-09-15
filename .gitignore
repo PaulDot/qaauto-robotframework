@@ -1,0 +1,21 @@
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# Python caching and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Robot Framework Execution Results
+results/
+browser/
+output.xml
+log.html
+report.html
+
+# Playwright/Node artifacts (from rfbrowser)
+node_modules/
+.playwright/

@@ -1,0 +1,57 @@
+name: Robot Framework Suite
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      the-internet:
+        image: gprestes/the-internet:v2.6.5
+        ports:
+          - 7080:5000
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip' # Cache pip packages matching requirements.txt
+
+      - name: Cache Playwright Browser Binaries
+        id: cache-browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/python-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install Project Dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+          
+      # Only run initialization overhead if cache misses
+      - name: Initialize Browser Binaries
+        if: steps.cache-browsers.outputs.cache-hit != 'true'
+        run: |
+          source venv/bin/activate
+          rfbrowser init
+
+      - name: Run Robot Framework Tests
+        run: |
+          source venv/bin/activate
+          robot --variable HEADLESS:True --outputdir results environment.robot
+
+      - name: Upload Test Report Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-framework-results
+          path: results/
+          retention-days: 30
