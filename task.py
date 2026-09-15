@@ -31,6 +31,12 @@ if __name__ == "__main__":
         print("\n✅ Test platform setup complete!")
 
     elif action == "test":
+        # Check if the local test env exists before running
+        if not os.path.exists(robot_bin):
+            print("\n❌ Error: Test platform not found.")
+            print("👉 Please run 'python task.py setup' first to install required dependencies.\n")
+            sys.exit(1)
+
         print("🚀 Launching Robot Framework Test Suite...")
         run_command(f"{robot_bin} --outputdir results environment.robot")
         
