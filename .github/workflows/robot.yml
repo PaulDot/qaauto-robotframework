@@ -25,7 +25,7 @@ jobs:
         id: cache-browsers
         uses: actions/cache@v4
         with:
-          path: venv/lib/python3.12/site-packages/Browser/wrapper/node_modules/playwright-core/.local-browsers/
+          path: browser/
           key: ${{ runner.os }}-playwright-${{ hashFiles('requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-playwright-
@@ -41,12 +41,12 @@ jobs:
         if: steps.cache-browsers.outputs.cache-hit != 'true'
         run: |
           source venv/bin/activate
-          rfbrowser init
+          PLAYWRIGHT_BROWSERS_PATH=0 rfbrowser init
 
       - name: Run Robot Framework Tests
         run: |
           source venv/bin/activate
-          python task.py test --headless
+          PLAYWRIGHT_BROWSERS_PATH=0 python task.py test --headless
 
       - name: Upload Test Report Artifacts
         if: always()
