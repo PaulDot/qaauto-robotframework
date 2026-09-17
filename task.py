@@ -1,6 +1,7 @@
 import sys
 import os
 import subprocess
+import manage_app
 
 def run_command(cmd):
     print(f"🏃 Executing: {cmd}")
@@ -37,8 +38,15 @@ if __name__ == "__main__":
             print("👉 Please run 'python task.py setup' first to install required dependencies.\n")
             sys.exit(1)
 
+        # Look for a custom flag in terminal args, otherwise default to False locally
+        headless_flag = "True" if "--headless" in sys.argv else "False"
+
+        manage_app.start_docker_environment()
+
         print("🚀 Launching Robot Framework Test Suite...")
-        run_command(f"{robot_bin} --outputdir results environment.robot")
+        run_command(f"{robot_bin} --variable HEADLESS:{headless_flag} --outputdir results tests/")
+
+        manage_app.teardown_docker_container()
         
     else:
         print(f"❌ Unknown action: '{action}'. Use 'setup' or 'test'.")

@@ -25,7 +25,7 @@ jobs:
         id: cache-browsers
         uses: actions/cache@v4
         with:
-          path: ~/.local/share/python-playwright
+          path: venv/lib/python3.12/site-packages/Browser/wrapper/node_modules/playwright-core/.local-browsers/
           key: ${{ runner.os }}-playwright-${{ hashFiles('requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-playwright-
@@ -46,7 +46,7 @@ jobs:
       - name: Run Robot Framework Tests
         run: |
           source venv/bin/activate
-          robot --variable HEADLESS:True --outputdir results environment.robot
+          python task.py test --headless
 
       - name: Upload Test Report Artifacts
         if: always()
