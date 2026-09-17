@@ -1,12 +1,17 @@
 import subprocess
-import sys
+import os
 
 CONTAINER_NAME = "the-internet-test-app"
 DOCKER_IMAGE = "gprestes/the-internet:v2.6.5"
 PORT = "7080"
 LIVE_SITE = "https://the-internet.herokuapp.com"
 
+IS_CI = os.environ.get("GITHUB_ACTIONS") == "true"
+
 def check_docker_availability():
+    # Skip in CI as GitHub Actions handles the service container natively
+    if IS_CI:
+        return True
     try:
         subprocess.run("docker info", shell=True, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         return True
@@ -22,6 +27,9 @@ def determine_base_url():
     return LIVE_SITE
 
 def start_docker_environment():
+    if IS_CI:
+        print("⛓️ GitHub Actions detected. Utilizing pipeline service container.")
+        return
     """Explicitly handles the setup lifecycle operations."""
     if not check_docker_availability():
         print("\n📡 Docker is closed or missing. Routing traffic to the LIVE site.\n")
@@ -47,6 +55,8 @@ def teardown_docker_container():
     """
     Stops and removes the test container if it is running.
     """
+    if IS_CI:
+        return
     # Check if Docker daemon is active before trying to stop
     if not check_docker_availability():
         return
