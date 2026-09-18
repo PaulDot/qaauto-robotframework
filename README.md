@@ -48,5 +48,5 @@ To review the interactive dashboard results, open `results/report.html` or `resu
 * [x] **Orchestration Phase:** Dynamic container manager (`manage_app.py`) with automatic fallback option.
 * [x] **CI/CD Layer:** Fully optimised GitHub Actions pipeline (`robot.yml`) with caching reducing the network load.
 * [x] **Ease of Use Tools:** Add script (`task.py`) to simplify local test platform setup and overall test execution.
-* [x] **Startup Refactor:** Remove `environment.robot` in favour of reworking `manage-app.py` and `task.py` and introducing `commonhooks.resource` to support launching of browsers for tests. Significant CI/cache changes.
+* [x] **Startup Refactor:** Remove `environment.robot` in favour of reworking `manage-app.py` and `task.py` and introducing `commonhooks.resource` to support launching of browsers for tests. Broken browser caching removed from CI.
 * [/] **Test Automation Phase:** ToDo: add tests into a **Page Object Model (POM)** structure within `/pages` and `/tests`.
