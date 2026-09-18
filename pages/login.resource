@@ -3,12 +3,11 @@ Documentation	Page Object representing the Form Authentication view elements and
 Library	        Browser
 
 *** Variables ***
-${LOGIN_HEADER}	    h2
+${LOGIN_HEADER}	    div[class='example'] h2
 ${USERNAME_INPUT}	css=input#username
 ${PASSWORD_INPUT}	css=input#password
 ${SUBMIT_BUTTON}	css=button[type="submit"]
 ${FLASH_MESSAGE}	css=#flash
-${SECURE_HEADER}	h2
 ${LOGOUT_BUTTON}	css=a.button.secondary
 
 *** Keywords ***
@@ -18,7 +17,7 @@ Verify Login Page Is Loaded
 
 Verify Secure Dashboard Is Loaded
     [Documentation]  Ensures the dashboard header is present.
-    Get Text  ${SECURE_HEADER}  ==  Secure Area
+    Get Text  ${LOGIN_HEADER}  ==  Secure Area
 
 Login With Credentials
     [Arguments]  ${username}  ${password}

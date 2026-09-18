@@ -3,19 +3,17 @@ Documentation	Page Object representing the Dynamic Controls view elements and as
 Library	Browser
 
 *** Variables ***
-${DC_HEADER}	css=h4:has-text("Dynamic Controls")
+${DC_HEADER}	        css=h4:has-text("Dynamic Controls")
 # Selector bounds for the Checkbox section
 ${CHECKBOX_CONTAINER}	css=div#checkbox
 ${CHECKBOX_ACTION_BTN}	css=form#checkbox-example button
-${CHECKBOX_MESSAGE}	css=form#checkbox-example p#message
-
+${CHECKBOX_MESSAGE}	    css=form#checkbox-example p#message
 # Selector bounds for the Input section
-${INPUT_FIELD}	css=form#input-example input[type="text"]
-${INPUT_ACTION_BTN}	css=form#input-example button
-${INPUT_MESSAGE}	css=form#input-example p#message
-
+${INPUT_FIELD}	        css=form#input-example input[type="text"]
+${INPUT_ACTION_BTN}	    css=form#input-example button
+${INPUT_MESSAGE}	    css=form#input-example p#message
 # Global dynamic spinner selector
-${LOADING_SPINNER}	css=div#loading
+${LOADING_SPINNER}	    css=div#loading
 
 *** Keywords ***
 Verify Dynamic Controls Page Is Loaded

@@ -3,7 +3,7 @@ Documentation	Suite covering positive and negative Form Authentication scenarios
 Resource	../resources/commonhooks.resource
 Resource	../pages/login.resource
 
-Suite Setup	Resolve Target Base Url
+Suite Setup	    Resolve Target Base Url
 
 Test Setup	    Begin Test Case Session  /login
 Test Teardown	End Test Case Session
