@@ -44,7 +44,7 @@ if __name__ == "__main__":
         manage_app.start_docker_environment()
 
         print("🚀 Launching Robot Framework Test Suite...", flush=True)
-        run_command(f"{robot_bin} --variable HEADLESS:{headless_flag} --outputdir results tests/", flush=True)
+        run_command(f"{robot_bin} --variable HEADLESS:{headless_flag} --outputdir results tests/")
 
         manage_app.teardown_docker_container()
         
