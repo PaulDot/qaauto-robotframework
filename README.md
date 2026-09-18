@@ -1,17 +1,13 @@
-# QA Automation Showcase — Robot Framework, Playwright Browser Library, Python
+# QA Automation Example — Robot Framework, Playwright Browser Library, Python
 
-[![Robot Framework Suite](https://github.com/PaulDot/qaauto-robotframework)](https://github.com/PaulDot/qaauto-robotframework)
-
-> 🚧 **Project Status: Active Work-in-Progress**
-
-This framework is built using **Robot Framework** powered by the **Playwright-backed Browser Library**, featuring self-managing local Docker service containers, live web fallback layers, and GitHub Actions that incorporate caching.
+This framework is built using **Robot Framework** powered by the **Playwright-backed Browser Library**, featuring a self-managing local Docker service container lifecycle, automated live web fallback orchestration, and a unified command-line execution to allow it to work in Windows, Mac and Linux.
 
 ---
 
 ## 🏗️ Core Architecture & Fallback Pattern
 To completely eliminate environment flakiness during test execution, this project uses an intelligent environment check (`manage_app.py`):
 1. **Local Execution (Docker Active):** Spins up an isolated [`gprestes/the-internet:v2.6.5`](https://hub.docker.com/r/gprestes/the-internet/) container locally on port `7080` and routes all tests there.
-2. **Local Execution (Docker Closed):** Transparently falls back to routing traffic to [the live production site](https://the-internet.herokuapp.com/).
+2. **Local Execution (Docker Closed):** Transparently falls back to routing traffic to [the live production site](https://the-internet.herokuapp.com/) if docker not available.
 3. **CI/CD Execution (GitHub Actions):** Runs tests against a temporary, dedicated Docker instance hosted directly in the pipeline.
 
 ---
@@ -35,7 +31,7 @@ cd qaauto-robotframework
 # Run the test platform setup script
 python task.py setup
 
-# Execute the test suite
+# Execute the test suite visually
 python task.py test
 # Or, headlessly, targetting specificly tagged or located tests
 python task.py test --headless -i Smoke tests/login.robot
@@ -44,11 +40,3 @@ python task.py test --headless -i Smoke tests/login.robot
 To review the interactive dashboard results, open `results/report.html` or `results/log.html` in any web browser.
 
 ---
-
-## 🛠️ Roadmap / Current Progression
-* [x] **Infrastructure Phase:** Standardized `structure and dependencies.
-* [x] **Orchestration Phase:** Dynamic container manager (`manage_app.py`) with automatic fallback option.
-* [x] **CI/CD Layer:** Fully optimised GitHub Actions pipeline (`robot.yml`) with caching reducing the network load.
-* [x] **Ease of Use Tools:** Add script (`task.py`) to simplify local test platform setup and overall test execution.
-* [x] **Startup Refactor:** Remove `environment.robot` in favour of reworking `manage-app.py` and `task.py` and introducing `commonhooks.resource` to support launching of browsers for tests. Broken browser caching removed from CI.
-* [/] **Test Automation Phase:** ToDo: add tests into a **Page Object Model (POM)** structure within `/pages` and `/tests`.
