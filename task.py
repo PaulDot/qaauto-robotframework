@@ -1,14 +1,15 @@
 import sys
 import os
 import subprocess
+import manage_app
 
 def run_command(cmd):
-    print(f"🏃 Executing: {cmd}")
+    print(f"🏃 Executing: {cmd}", flush=True)
     subprocess.run(cmd, shell=True, check=True)
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("❌ Usage: python task.py [setup|test]")
+        print("❌ Usage: python task.py [setup|test]", flush=True)
         sys.exit(1)
 
     action = sys.argv[1]
@@ -20,26 +21,33 @@ if __name__ == "__main__":
     robot_bin = "venv\\Scripts\\robot" if is_windows else "./venv/bin/robot"
 
     if action == "setup":
-        print("📦 Creating virtual environment...")
+        print("📦 Creating virtual environment...", flush=True)
         run_command(f"{sys.executable} -m venv venv")
         
-        print("📥 Installing Python dependencies...")
+        print("📥 Installing Python dependencies...", flush=True)
         run_command(f"{pip_bin} install -r requirements.txt")
         
-        print("🌐 Initializing Playwright browser engines...")
+        print("🌐 Initializing Playwright browser engines...", flush=True)
         run_command(f"{rf_bin} init")
-        print("\n✅ Test platform setup complete!")
+        print("\n✅ Test platform setup complete!", flush=True)
 
     elif action == "test":
         # Check if the local test env exists before running
         if not os.path.exists(robot_bin):
-            print("\n❌ Error: Test platform not found.")
-            print("👉 Please run 'python task.py setup' first to install required dependencies.\n")
+            print("\n❌ Error: Test platform not found.", flush=True)
+            print("👉 Please run 'python task.py setup' first to install required dependencies.\n", flush=True)
             sys.exit(1)
 
-        print("🚀 Launching Robot Framework Test Suite...")
-        run_command(f"{robot_bin} --outputdir results environment.robot")
+        # Look for a custom flag in terminal args, otherwise default to False locally
+        headless_flag = "True" if "--headless" in sys.argv else "False"
+
+        manage_app.start_docker_environment()
+
+        print("🚀 Launching Robot Framework Test Suite...", flush=True)
+        run_command(f"{robot_bin} --variable HEADLESS:{headless_flag} --outputdir results tests/")
+
+        manage_app.teardown_docker_container()
         
     else:
-        print(f"❌ Unknown action: '{action}'. Use 'setup' or 'test'.")
+        print(f"❌ Unknown action: '{action}'. Use 'setup' or 'test'.", flush=True)
         sys.exit(1)
