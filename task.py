@@ -41,10 +41,18 @@ if __name__ == "__main__":
         # Look for a custom flag in terminal args, otherwise default to False locally
         headless_flag = "True" if "--headless" in sys.argv else "False"
 
+        # Filter out the action name and the optional --headless flag to catch tags
+        extra_args = [arg for arg in sys.argv[2:] if arg != "--headless"] 
+        # Check if any argument ends with '.robot' or targets a specific item
+        has_custom_target = any(arg.endswith(".robot") or arg.startswith("tests/") for arg in extra_args)
+        # If no custom target path is given, fall back to executing the whole 'tests/' directory
+        target_path = "" if has_custom_target else "tests/"
+        extra_args_str = " ".join(extra_args)
+
         manage_app.start_docker_environment()
 
         print("🚀 Launching Robot Framework Test Suite...", flush=True)
-        run_command(f"{robot_bin} --variable HEADLESS:{headless_flag} --outputdir results tests/")
+        run_command(f"{robot_bin} --variable HEADLESS:{headless_flag} --outputdir results {extra_args_str} {target_path}")
 
         manage_app.teardown_docker_container()
         
