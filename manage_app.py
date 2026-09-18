@@ -28,15 +28,15 @@ def determine_base_url():
 
 def start_docker_environment():
     if IS_CI:
-        print("⛓️ GitHub Actions detected. Utilizing pipeline service container.")
+        print("⛓️ GitHub Actions detected. Utilizing pipeline service container.", flush=True)
         return
     """Explicitly handles the setup lifecycle operations."""
     if not check_docker_availability():
-        print("\n📡 Docker is closed or missing. Routing traffic to the LIVE site.\n")
+        print("\n📡 Docker is closed or missing. Routing traffic to the LIVE site.\n", flush=True)
         return
 
     try:
-        print(f"🚀 Ensuring Docker container '{CONTAINER_NAME}' is ready...")
+        print(f"🚀 Ensuring Docker container '{CONTAINER_NAME}' is ready...", flush=True)
         subprocess.run(["docker", "rm", "-f", CONTAINER_NAME], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
         subprocess.run([
@@ -46,10 +46,10 @@ def start_docker_environment():
             DOCKER_IMAGE
         ], check=True, stdout=subprocess.DEVNULL)
         
-        print(f"✅ Local container running on http://localhost:{PORT}")
+        print(f"✅ Local container running on http://localhost:{PORT}", flush=True)
         
     except subprocess.CalledProcessError:
-        print("⚠️ Failed to spin up Docker container. Falling back to LIVE site.")
+        print("⚠️ Failed to spin up Docker container. Falling back to LIVE site.", flush=True)
 
 def teardown_docker_container():
     """
@@ -61,9 +61,9 @@ def teardown_docker_container():
     if not check_docker_availability():
         return
     try:
-        print(f"\n🛑 Tearing down Docker container '{CONTAINER_NAME}'...")
+        print(f"\n🛑 Tearing down Docker container '{CONTAINER_NAME}'...", flush=True)
         subprocess.run(["docker", "rm", "-f", CONTAINER_NAME], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        print("✅ Container removed successfully.")
+        print("✅ Container removed successfully.", flush=True)
     except (subprocess.CalledProcessError, FileNotFoundError):
         # Gracefully skip if Docker isn't running or available
         pass
