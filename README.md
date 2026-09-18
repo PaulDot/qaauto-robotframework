@@ -36,7 +36,9 @@ cd qaauto-robotframework
 python task.py setup
 
 # Execute the test suite
-python task.py test --headless
+python task.py test
+# Or, headlessly, targetting specificly tagged or located tests
+python task.py test --headless -i Smoke tests/login.robot
 ```
 
 To review the interactive dashboard results, open `results/report.html` or `results/log.html` in any web browser.
