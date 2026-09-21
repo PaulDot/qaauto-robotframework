@@ -10,6 +10,27 @@ To completely eliminate environment flakiness during test execution, this projec
 2. **Local Execution (Docker Closed):** Transparently falls back to routing traffic to [the live production site](https://the-internet.herokuapp.com/) if docker not available.
 3. **CI/CD Execution (GitHub Actions):** Runs tests against a temporary, dedicated Docker instance hosted directly in the pipeline.
 
+### Architecture Flowchart
+
+```mermaid
+graph TD
+    A[User / CI Run Command] --> B{task.py test}
+    B -->|Check Context| C(manage_app.py Context Manager)
+    
+    subgraph Local Run [Local Environment Execution]
+    C -->|Docker Available| D[Spin up local Docker Container<br/>gprestes/the-internet]
+    C -->|Docker Missing| E[Orchestrate Fallback Routing<br/>Live Production Site]
+    end
+
+    subgraph CI Run [GitHub Actions Pipeline]
+    C -->|Pipeline Active| F[Leverage GitHub Actions runner service<br/>Isolated Docker container on 7080]
+    end
+
+    D --> G[Robot Framework + Playwright Tests]
+    E --> G
+    F --> G
+    G --> H[Generate Artifacts<br/>report.html / log.html]
+```
 ---
 
 ## 🚀 Quick Start: Run the Project Locally
@@ -33,7 +54,7 @@ python task.py setup
 
 # Execute the test suite visually
 python task.py test
-# Or, headlessly, targetting specificly tagged or located tests
+# Or, headlessly, targetting specifically tagged or located tests
 python task.py test --headless -i Smoke tests/login.robot
 ```
 
